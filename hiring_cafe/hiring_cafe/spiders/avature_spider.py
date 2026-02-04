@@ -139,14 +139,27 @@ class AvatureSpider(scrapy.Spider):
                 if key in ALLOWED_FIELDS:
                     extracted_fields[key] = value.strip()
         
-        # --- Job description ---
-        description_blocks = response.css(
-            ".article--details .article__content__view__field__value::text"
+
+                # Seleciona todo o conteúdo dentro de article__content__view
+        text_nodes = response.css(
+            ".article__content__view ::text"
         ).getall()
-        
-        description = "\n".join(
-            b.strip() for b in description_blocks if len(b.strip()) > 40
-        )
+
+        # Limpar espaços e quebras
+        cleaned = [t.strip() for t in text_nodes if t.strip()]
+
+        # Remover linhas finais de UI indesejadas
+        lines_to_remove = {"share this job", "facebook", "x", "linkedin", "apply", "email", "share"}
+        while cleaned:
+            last_line = cleaned[-1].lower().rstrip(":")
+            if any(kw in last_line for kw in lines_to_remove):
+                cleaned.pop()
+            else:
+                break
+
+        # Juntar tudo em uma string final
+        description = " ".join(cleaned)
+
         
         # --- Create item only at the end ---
         job = AvatureJobItem()
