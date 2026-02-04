@@ -7,20 +7,6 @@ from datetime import datetime, timezone
 
 AVATURE_SITES = load_avature_sites()
 
-CUSTOM_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Accept-Language': 'en-US,en;q=0.5',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'DNT': '1',
-    'Connection': 'keep-alive',
-    'Upgrade-Insecure-Requests': '1',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
-    'Sec-Fetch-User': '?1',
-}
-
 ALLOWED_FIELDS = {
     "work_location",
     "posted_date",
@@ -34,7 +20,6 @@ class AvatureSpider(scrapy.Spider):
     allowed_domains = ["avature.net"]
     
     custom_settings = {
-        'DEFAULT_REQUEST_HEADERS': CUSTOM_HEADERS,
         'COOKIES_ENABLED': True,
         'CONCURRENT_REQUESTS': 2,
         'DOWNLOAD_DELAY': 1,
@@ -52,8 +37,7 @@ class AvatureSpider(scrapy.Spider):
                 meta={
                     "site_name": site_name,
                     "base_domain": base_url.split("/careers")[0]
-                },
-                headers=CUSTOM_HEADERS
+                }
             )
     
     def parse_listing(self, response):
@@ -72,8 +56,7 @@ class AvatureSpider(scrapy.Spider):
             if not href:
                 continue
             
-            if href.startswith("/"):
-                href = urljoin(base_domain, href)
+            href = urljoin(base_domain, href) if href.startswith("/") else href
             
             yield scrapy.Request(
                 href,
@@ -85,6 +68,7 @@ class AvatureSpider(scrapy.Spider):
                 },
             )
         
+        # Paginação
         next_page = response.css("a.paginationNextLink::attr(href)").get()
         if next_page:
             next_page = urljoin(base_domain, next_page)
@@ -105,24 +89,15 @@ class AvatureSpider(scrapy.Spider):
         
         # --- Job ID extraction ---
         match = re.search(r"\d+", url)
-        if not match:
-            self.logger.warning(f"Job ID not found in URL, skipping job: {url}")
-            return
-        
-        job_id = match.group()
+        job_id = match.group() if match else None
         
         # --- Fields extraction ---
         extracted_fields = {}
         fields = response.css(".article__content__view__field")
         
         for field in fields:
-            label = field.css(
-                ".article__content__view__field__label::text"
-            ).get()
-            
-            value = field.css(
-                ".article__content__view__field__value::text"
-            ).get()
+            label = field.css(".article__content__view__field__label::text").get()
+            value = field.css(".article__content__view__field__value::text").get()
             
             if not value:
                 continue
@@ -139,16 +114,9 @@ class AvatureSpider(scrapy.Spider):
                 if key in ALLOWED_FIELDS:
                     extracted_fields[key] = value.strip()
         
-
-                # Seleciona todo o conteúdo dentro de article__content__view
-        text_nodes = response.css(
-            ".article__content__view ::text"
-        ).getall()
-
-        # Limpar espaços e quebras
+        # --- Description ---
+        text_nodes = response.css(".article__content__view ::text").getall()
         cleaned = [t.strip() for t in text_nodes if t.strip()]
-
-        # Remover linhas finais de UI indesejadas
         lines_to_remove = {"share this job", "facebook", "x", "linkedin", "apply", "email", "share"}
         while cleaned:
             last_line = cleaned[-1].lower().rstrip(":")
@@ -156,20 +124,15 @@ class AvatureSpider(scrapy.Spider):
                 cleaned.pop()
             else:
                 break
-
-        # Juntar tudo em uma string final
         description = " ".join(cleaned)
 
-        
-        # --- Create item only at the end ---
+        # --- Create item ---
         job = AvatureJobItem()
         job["title"] = title
         job["url"] = url
         job["source"] = site_name
         job["job_id"] = job_id
-        job["extracted_at"] = datetime.now(
-            timezone.utc
-        ).isoformat()
+        job["extracted_at"] = datetime.now(timezone.utc).isoformat()
         
         for key, value in extracted_fields.items():
             job[key] = value

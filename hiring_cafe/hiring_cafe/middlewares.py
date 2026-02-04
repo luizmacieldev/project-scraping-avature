@@ -142,7 +142,7 @@ class RotateUserAgentMiddleware:
     def __init__(self):
         self.counter = 0
         self.current_ua = random.choice(self.USER_AGENTS)
-        self.swap_every = 5  # troca a cada 5 requests
+        self.swap_every = 5  # change each 5 requests
 
     def process_request(self, request, spider):
         if self.counter % self.swap_every == 0:
