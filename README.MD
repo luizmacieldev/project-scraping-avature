@@ -115,3 +115,25 @@ The scraping results will be saved in:
 
 - **Number of Avature ATS Sites Scraped:** 9  
 - **Total Job Listings Collected:** 2,151
+
+### Example of Data Extracted
+The JSON below shows a single job posting extracted by the scraper. Each entry contains structured information about the job, including its title, location, business area, and a direct link to apply.
+
+Example:
+
+```json
+{
+  "title": "Senior Interaction Designer – Bloomberg Connects",
+  "url": "https://bloomberg.avature.net/careers/JobDetail/Senior-Interaction-Designer-Bloomberg-Connects/15242",
+  "source": "bloomberg",
+  "job_id": "15242",
+  "extracted_at": "2026-02-04T16:43:23.495508+00:00",
+  "work_location": "New York",
+  "business_area": "Engineering and CTO",
+  "job_description": "Senior Interaction Designer – Bloomberg Connects\nDiscover what makes Bloomberg unique - watch our\nfor an inside look at our culture, values, and the people behind our success."
+}
+
+
+
+
+
