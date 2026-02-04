@@ -1,0 +1,27 @@
+avature_sites:
+  - name: maximus
+    base_url: https://maximus.avature.net/careers/SearchJobs/
+
+  - name: unifi
+    base_url: https://unifi.avature.net/careers/SearchJobs/
+
+  - name: ally
+    base_url: https://ally.avature.net/careers/SearchJobs/
+
+  - name: synopsys
+    base_url: https://synopsys.avature.net/careers/SearchJobs/
+
+  - name: tescoinsuranceandmoneyservices
+    base_url: https://tescoinsuranceandmoneyservices.avature.net/careers/SearchJobs/
+
+  - name: broad_institute
+    base_url: https://broadinstitute.avature.net/en_US/careers/
+
+  - name: ucla_health
+    base_url: https://uclahealth.avature.net/careers/SearchJobs/
+
+  - name: bloomberg
+    base_url: https://bloomberg.avature.net/careers/SearchJobs/
+
+  - name: amswh
+    base_url: https://amswh.avature.net/careers/SearchJobs/
