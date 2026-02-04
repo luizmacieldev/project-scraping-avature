@@ -101,3 +101,51 @@ class HiringCafeDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+import random
+
+class RotateUserAgentMiddleware:
+    USER_AGENTS = [
+        # Windows / Chrome
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/119.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/118.0.5993.90 Safari/537.36",
+        
+        # Mac / Safari
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_5) AppleWebKit/605.1.15 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 Safari/605.1.15",
+        
+        # Linux / Firefox
+        "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/117.0",
+        "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/116.0",
+        
+        # iPhone / Safari
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 Safari/605.1.15",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_7 like Mac OS X) AppleWebKit/605.1.15 Safari/605.1.15",
+        
+        # Android / Chrome
+        "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36",
+        "Mozilla/5.0 (Linux; Android 12; SM-G991B) AppleWebKit/537.36 Chrome/119.0.0.0 Mobile Safari/537.36",
+        
+        # iPad / Safari
+        "Mozilla/5.0 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 Safari/605.1.15",
+        
+        # Edge / Windows
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+        
+        # Opera / Windows
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/118.0.5993.90 Safari/537.36 OPR/104.0.0.0",
+    ]
+
+
+    def __init__(self):
+        self.counter = 0
+        self.current_ua = random.choice(self.USER_AGENTS)
+        self.swap_every = 5  # troca a cada 5 requests
+
+    def process_request(self, request, spider):
+        if self.counter % self.swap_every == 0:
+            self.current_ua = random.choice(self.USER_AGENTS)
+        request.headers['User-Agent'] = self.current_ua
+        self.counter += 1

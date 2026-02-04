@@ -71,6 +71,11 @@ ITEM_PIPELINES = {
 }
 
 
+DOWNLOADER_MIDDLEWARES = {
+    'hiring_cafe.middlewares.RotateUserAgentMiddleware': 400,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
