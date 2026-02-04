@@ -77,7 +77,7 @@ hiring_cafe_scrapy/
 1. Clone the repository:
     ```bash
     git clone https://github.com/luizmacieldev/test-scraping-avature.git
-    cd hiring_cafe_scrapy
+    cd test-scraping-avature
     ```
 
 2. Install dependencies:
