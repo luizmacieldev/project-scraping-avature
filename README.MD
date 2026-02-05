@@ -101,7 +101,7 @@ hiring_cafe/
 4. Run the scraper to save in JSON:
     ```bash
     cd hiring_cafe/hiring_cafe/
-    scrapy crawl avature_spider -O jobs.json
+    scrapy crawl avature_spider -O avature_jobs.json
     ```
 
 ---
@@ -125,7 +125,7 @@ The configuration file containing the list of sites to be scraped is located at:
 `test-scraping-avature/hiring_cafe/hiring_cafe/config/avature_sites.yaml`
 
 The scraping results will be saved in:  
-`test-scraping-avature/hiring_cafe/jobs.json`
+`test-scraping-avature/hiring_cafe/avature_jobs.json`
 
 - **Number of Avature ATS Sites Scraped:** 9  
 - **Total Job Listings Collected:** 2,151
