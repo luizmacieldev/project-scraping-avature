@@ -97,13 +97,17 @@ hiring_cafe_scrapy/
 ---
 
 ### Engineering Logic
-One of the very first steps I took in this project was to identify and compile a list of companies that utilize the Avature ATS platform for their careers pages, such as `avature.net/careers`. I spent considerable time exploring the web, inspecting multiple company websites, and verifying which ones were built on this platform. This step was crucial to ensure that the scraping process would target relevant, consistent, and accessible sources, providing a solid foundation for collecting job postings in a structured and reliable way.
+One of the very first steps in this project was identifying and compiling a list of companies that use the Avature ATS platform for their careers pages (e.g., *.avature.net/careers). I spent significant time researching the web, inspecting multiple company career sites, and verifying which ones were built on Avature. This step was essential to ensure that the scraping process targeted relevant, consistent, and accessible sources, providing a solid foundation for collecting job postings in a structured and reliable manner.
 
+Next, I carefully inspected each target site’s robots.txt file to confirm that scraping was permitted and to understand which paths were allowed. I then thoroughly explored each site using the browser’s developer tools, analyzing pagination behavior, network requests, and potential API endpoints. Despite an extensive investigation, none of the sites exposed public or reusable APIs for accessing job data.
 
-Then, I took was to carefully inspect each target site’s `robots.txt` file to ensure that scraping was permitted and to identify the allowed paths. <br />
-I then thoroughly explored the browser’s developer console, inspecting all paginations, network requests, and potential API endpoints, but despite an extensive search, none of the sites provided public endpoints for job data.
+As a result, I designed a generic HTML-based scraping solution using Scrapy, capable of extracting job listings, job details, and descriptions directly from the rendered page content. The scraper relies on flexible and resilient selectors to accommodate structural variations across different Avature-hosted sites.
 
-As a result, I designed a generic HTML-based scraper capable of extracting job listings, details, and descriptions directly from the page content, using flexible selectors to handle variations between sites. During development, I encountered a `406 Not Acceptable` error from Nginx, which required configuring custom HTTP headers to mimic a real browser and avoid blocking. Additionally, to ensure data integrity, I implemented a pipeline that deduplicates job entries based on their `job_id`, guaranteeing that only unique jobs are included in the final dataset.
+During development, I encountered 406 Not Acceptable responses from Nginx, which indicated server-side filtering of non-browser-like requests. To address this, I implemented a custom downloader middleware that rotates User-Agent headers periodically, mimicking real browser traffic and reducing the likelihood of request blocking. The middleware swaps the User-Agent every few requests, improving request acceptance and scraper stability.
+
+In addition, to ensure data quality and integrity, I implemented a Scrapy item pipeline responsible for deduplicating job entries based on their job_id. This guarantees that each job appears only once in the final dataset, even when the same posting is encountered multiple times due to pagination or navigation paths.
+
+Overall, this approach prioritizes robustness, compliance, and data cleanliness, while remaining adaptable to differences across Avature-powered career sites.
 
 ### Other Informations
 
