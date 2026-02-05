@@ -53,7 +53,7 @@ The scraper is designed to handle **HTML job listings**, providing a complete da
 hiring_cafe/
 ├── spiders/
 │   ├── avature_spider.py        # Main spider for scraping Avature ATS sites
-│   └── __init__.py              # Spider package initialization
+│   └── __init__.py              
 │
 ├── common/
 │   ├── __init__.py
