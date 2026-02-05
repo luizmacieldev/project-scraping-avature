@@ -50,17 +50,27 @@ The scraper is designed to handle **HTML job listings**, providing a complete da
 ## Project Structure
 
 ```
-hiring_cafe_scrapy/
+hiring_cafe/
 ├── spiders/
-│   ├── avature_spider.py       # Main spider for scraping Avature sites
-│   └── __init__.py             # Spider package initialization
-├── items.py                    # Defines the AvatureJobItem structure
-├── pipelines.py                # Handles data processing and storage
-├── settings.py                 # Scrapy project settings
-├── middlewares.py              # Custom middlewares for request handling
-├── requirements.txt            # Python dependencies
-├── README.md                   # Project documentation
-└── scrapy.cfg                  # Scrapy configuration file
+│   ├── avature_spider.py        # Main spider for scraping Avature ATS sites
+│   └── __init__.py              # Spider package initialization
+│
+├── common/
+│   ├── __init__.py
+│   └── functions.py             # Reusable helper and utility functions
+│
+├── config/
+│   └── avature_sites.yaml       # List of Avature-hosted sites to be scraped
+│
+├── items.py                     # Defines the AvatureJobItem structure
+├── pipelines.py                 # Item pipelines (deduplication, cleaning, output)
+├── settings.py                  # Scrapy project settings
+├── middlewares.py               # Custom downloader middlewares (e.g. User-Agent rotation)
+│
+├── requirements.txt             # Python dependencies
+├── README.md                    # Project documentation
+└── scrapy.cfg                   # Scrapy configuration file
+
 ```
 
 ---
@@ -91,7 +101,7 @@ hiring_cafe_scrapy/
 4. Run the scraper to save in JSON:
     ```bash
     cd hiring_cafe/hiring_cafe/
-    scrapy crawl avature_spider -O avature_jobs.json
+    scrapy crawl avature_spider -O jobs.json
     ```
 
 ---
@@ -112,10 +122,10 @@ Overall, this approach prioritizes robustness, compliance, and data cleanliness,
 ### Other Informations
 
 The configuration file containing the list of sites to be scraped is located at:  
-`hiring_cafe_scrapy/hiring_cafe/hiring_cafe/config/avature_sites.yaml`
+`test-scraping-avature/hiring_cafe/hiring_cafe/config/avature_sites.yaml`
 
 The scraping results will be saved in:  
-`hiring_cafe_scrapy/hiring_cafe/jobs.json`
+`test-scraping-avature/hiring_cafe/jobs.json`
 
 - **Number of Avature ATS Sites Scraped:** 9  
 - **Total Job Listings Collected:** 2,151
