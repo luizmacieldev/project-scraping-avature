@@ -86,8 +86,8 @@ hiring_cafe/
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/luizmacieldev/test-scraping-avature.git
-    cd test-scraping-avature
+    git clone https://github.com/luizmacieldev/project-scraping-avature.git
+    cd project-scraping-avature
     ```
 
 2. Install dependencies:
@@ -122,10 +122,10 @@ Overall, this approach prioritizes robustness, compliance, and data cleanliness,
 ### Other Informations
 
 The configuration file containing the list of sites to be scraped is located at:  
-`test-scraping-avature/hiring_cafe/hiring_cafe/config/avature_sites.yaml`
+`project-scraping-avature/hiring_cafe/hiring_cafe/config/avature_sites.yaml`
 
 The scraping results will be saved in:  
-`test-scraping-avature/hiring_cafe/avature_jobs.json`
+`project-scraping-avature/hiring_cafe/avature_jobs.json`
 
 - **Number of Avature ATS Sites Scraped:** 9  
 - **Total Job Listings Collected:** 2,151
